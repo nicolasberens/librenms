@@ -1,0 +1,208 @@
+LANTRONIX-SLS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+	MODULE-IDENTITY,OBJECT-TYPE,enterprises		FROM SNMPv2-SMI
+	Integer32, NOTIFICATION-TYPE			FROM SNMPv2-SMI
+	DisplayString,DateAndTime,MacAddress  		FROM SNMPv2-TC
+	MODULE-COMPLIANCE, OBJECT-GROUP 	        FROM SNMPv2-CONF;
+
+lantronix MODULE-IDENTITY
+	LAST-UPDATED "200611100000Z"
+	ORGANIZATION "Lantronix, Inc."
+	CONTACT-INFO "Lantronix Technical Support
+		      15353 Barranca Parkway
+		      Irvine, CA 92618 USA
+		      +1 800 422-7044
+		      snmp@lantronix.com"
+	DESCRIPTION  "The structure of Management Information for the Lantronix enterprise"
+	REVISION     "200611100000Z"
+	DESCRIPTION  "Version with sls added."
+		    ::= { enterprises 244 }
+
+products    OBJECT IDENTIFIER ::= { lantronix 1 }
+slm         OBJECT IDENTIFIER ::= { products 10 }
+sls         OBJECT IDENTIFIER ::= { products 11 }
+
+board		OBJECT IDENTIFIER ::= { sls 1 }
+host		OBJECT IDENTIFIER ::= { sls 2 }
+Common		OBJECT IDENTIFIER ::= { sls 3 }
+Traps		OBJECT IDENTIFIER ::= { sls 4 }
+
+Info		OBJECT IDENTIFIER ::= { board 1 }
+Users		OBJECT IDENTIFIER ::= { board 2 }
+Actions		OBJECT IDENTIFIER ::= { board 3 }
+
+HostInfo	OBJECT IDENTIFIER ::= { host 1 }
+HostActions	OBJECT IDENTIFIER ::= { host 2 }
+
+firmwareVersion	OBJECT-TYPE
+			SYNTAX		DisplayString
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The current firmware version"
+		::= { Info 1 }
+
+serialNumber	OBJECT-TYPE
+			SYNTAX		DisplayString
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The serial number."
+		::= { Info 2 }
+
+IP		OBJECT-TYPE
+			SYNTAX		IpAddress
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The current IP address. A value of 0.0.0.0 indicates an error
+				or an unset option."
+		::= { Info 3 }
+
+Netmask		OBJECT-TYPE
+			SYNTAX		IpAddress
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The current Netmask. A value of 0.0.0.0 indicates an error
+				or an unset option."
+
+		::= { Info 4 }
+
+Gateway		OBJECT-TYPE
+			SYNTAX		IpAddress
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The current Gateway. A value of 0.0.0.0 indicates an error
+				or an unset option."
+		::= { Info 5 }
+
+MAC		OBJECT-TYPE
+			SYNTAX		MacAddress
+			MAX-ACCESS	read-only
+			STATUS		current
+		DESCRIPTION
+				"The current MAC address."
+		::= { Info 6 }
+
+HardwareRev	OBJECT-TYPE
+			SYNTAX		Integer32(0..255)
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The hardware revision number."
+		::= { Info 7 }
+
+eventType       OBJECT-TYPE
+                        SYNTAX		DisplayString
+			MAX-ACCESS	not-accessible
+			STATUS		current
+			DESCRIPTION
+				"The name of a generic log event"
+		::= { Info 8 }
+
+eventDesc       OBJECT-TYPE
+                        SYNTAX		DisplayString
+			MAX-ACCESS	not-accessible
+			STATUS		current
+			DESCRIPTION
+				"The description text of a generic log event"
+		::= { Info 9 }
+
+userLoginName	OBJECT-TYPE
+			SYNTAX		DisplayString
+			MAX-ACCESS	not-accessible
+			STATUS		current
+			DESCRIPTION
+				"The login of a user."
+		::= { Info 10 }
+
+remoteHost	OBJECT-TYPE
+			SYNTAX		IpAddress
+			MAX-ACCESS	not-accessible
+			STATUS		current
+			DESCRIPTION
+				"The IP of the remote host from which a user is logged in."
+		::= { Info 11 }
+
+checkHostPower	OBJECT-TYPE
+			SYNTAX		INTEGER {
+						hasPower(1),
+						hasnoPower(2),
+						error(3),
+						notsupported(4)
+					}
+			MAX-ACCESS	read-only
+			STATUS		current
+			DESCRIPTION
+				"The Power status of the host."
+		::= { HostInfo 1 }
+
+hostReset	OBJECT-TYPE
+			SYNTAX		INTEGER {
+						reset(1)
+					}
+			MAX-ACCESS	read-write
+			STATUS		current
+			DESCRIPTION
+				"This virtually presses the Reset button of the host."
+			::= { HostActions 1 }
+
+hostPower	OBJECT-TYPE
+			SYNTAX		INTEGER {
+						shortPress(1),
+						longPress(2)
+					}
+			MAX-ACCESS	read-write
+			STATUS		current
+			DESCRIPTION
+				"This virtually presses the Power button of the host
+				with a short or long press."
+			::= { HostActions 2 }
+
+resetBoard	OBJECT-TYPE
+			SYNTAX		INTEGER {
+						reset(1)
+					}
+			MAX-ACCESS	read-write
+			STATUS		current
+			DESCRIPTION
+				"Resets the board."
+			::= { Actions 1 }
+
+DummyTrap NOTIFICATION-TYPE
+	STATUS current
+	DESCRIPTION
+		"Dummy Trap for testing"
+	::= { Traps 1 }
+
+Loginfailed NOTIFICATION-TYPE
+	OBJECTS { userLoginName, remoteHost }
+        STATUS current
+        DESCRIPTION
+		"Failed login try."
+        ::= { Traps 2 }
+
+Loginsuccess NOTIFICATION-TYPE
+	OBJECTS { userLoginName, remoteHost }
+	STATUS current
+	DESCRIPTION
+		"Success login."
+	::= { Traps 3 }
+
+SecurityViolation NOTIFICATION-TYPE
+	OBJECTS { userLoginName, remoteHost }
+	STATUS current
+	DESCRIPTION
+		"Security violation."
+	::= { Traps 4 }
+
+Generic NOTIFICATION-TYPE
+        OBJECTS { eventType, eventDesc }
+        STATUS current
+	DESCRIPTION
+		"This trap is used for any other notification message."
+	::= { Traps 5 }
+END
