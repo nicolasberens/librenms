@@ -1,0 +1,12 @@
+os: netcom
+text: 'Netcom ADH'
+type: appliance
+over:
+    - { graph: device_percent, text: 'Duty Cycle' }
+    - { graph: device_pressure, text: 'Pressure' }
+    - { graph: device_temperature, text: 'Temperature' }
+
+discovery:
+    - sysObjectID:
+          - .1.3.6.1.4.1.32185.
+mib_dir: eti
