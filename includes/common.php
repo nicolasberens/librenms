@@ -734,7 +734,7 @@ function array_by_column($array, $column)
  * Converts PSI to kpa (with 2 decimal places)
  *
  * @param  float  $value
- * @return string (containing a float)
+ * @return float
  */
 function psi_to_kpa($value)
 {
@@ -747,7 +747,7 @@ function psi_to_kpa($value)
  * Converts mbar to kPa (with 2 decimal places)
  *
  * @param float $value Value in millibars
- * @return string Converted value in kilopascals (containing a float)
+ * @return float
  */
 function mbar_to_kpa($value)
 {
