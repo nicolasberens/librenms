@@ -462,6 +462,15 @@ function discovery_process($os, $sensor_class, $pre_cache)
                             $user_function = 'fahrenheit_to_celsius';
                         }
                     }
+                    if ($sensor_class === 'pressure' && is_string($snmp_value)) {
+                        // for pressure sensors, try to detect psi or mbar values
+                        if (Str::endsWith($snmp_value, ['psi', 'PSI'])) {
+                            $user_function = 'psi_to_kpa';
+                        }
+                        if (Str::endsWith($snmp_value, ['mbar'])) {
+                            $user_function = 'mbar_to_kpa';
+                        }
+                    }
                     preg_match('/-?\d*\.?\d+/', $snmp_value, $temp_response);
                     if (! empty($temp_response[0])) {
                         $snmp_value = $temp_response[0];

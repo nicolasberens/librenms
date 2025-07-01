@@ -727,3 +727,31 @@ function array_by_column($array, $column)
 {
     return array_combine(array_column($array, $column), $array);
 }
+
+
+
+/**
+ * Converts PSI to kpa (with 2 decimal places)
+ *
+ * @param  float  $value
+ * @return string (containing a float)
+ */
+function psi_to_kpa($value)
+{
+    // 1 PSI = 6.894757293168361 kPa
+    $kpa = $value * 6.894757293168361;
+    return round($value,2);
+}
+
+/**
+ * Converts mbar to kPa (with 2 decimal places)
+ *
+ * @param float $value Value in millibars
+ * @return string Converted value in kilopascals (containing a float)
+ */
+function mbar_to_kpa($value)
+{
+    // 1 mbar = 0.1 kPa
+    $kpa = $value * 0.1;
+    return round($value,2);
+}
