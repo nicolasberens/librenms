@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  * Small helper to decode the Alarm String
