@@ -6,8 +6,10 @@
  *
  */
 
-$alarmsOid = ".1.3.6.1.4.1.32185.2.1.6.0";
-$alarmsString = snmp_get($device, $alarmsOid, '-Ovq', 'ADH-NETCOM-MIB');
+$oid = ".1.3.6.1.4.1.32185.2.1.6.0";
+$alarmsString = snmp_get($device, $oid, '-Ovq', 'ADH-NETCOM-MIB');
+$current_value=1;
+$state_index_name = "alarmState";
 
 /*
  * alarms OBJECT-TYPE
@@ -47,43 +49,37 @@ $alarmsString = snmp_get($device, $alarmsOid, '-Ovq', 'ADH-NETCOM-MIB');
 
 
 #
-#    $rate_states = [
-#        ['value' => 1, 'generic' => 2, 'graph' => 1, 'descr' => '1X (QPSK+SFBC)'],
-#        ['value' => 2, 'generic' => 2, 'graph' => 1, 'descr' => '2X (QPSK)'],
-#        ['value' => 4, 'generic' => 1, 'graph' => 1, 'descr' => '4X (16QAM)'],
-#        ['value' => 6, 'generic' => 1, 'graph' => 1, 'descr' => '6X (64QAM)'],
-#        ['value' => 8, 'generic' => 0, 'graph' => 1, 'descr' => '8X (256QAM)'],
-#        ['value' => 10, 'generic' => 0, 'graph' => 1, 'descr' => '10X (1024QAM)'],
-#        ['value' => 12, 'generic' => 0, 'graph' => 1, 'descr' => '12X (4096QAM)'],
-#    ];
+$states = [
+    ['value' => 0, 'generic' => 0, 'graph' => 1, 'descr' => 'Unknown'],
+    ['value' => 1, 'generic' => 1, 'graph' => 1, 'descr' => 'OK'],
+    ['value' => 2, 'generic' => 2, 'graph' => 1, 'descr' => 'Warning'],
+    ['value' => 3, 'generic' => 3, 'graph' => 1, 'descr' => 'Alarm'],
+];
 #
-#    create_state_index($txrate_state_name, $rate_states);
-#    create_state_index($rxrate_state_name, $rate_states);
-$current_value=0;
+create_state_index($state_index_name, $states);
 
+discover_sensor(null, 'state', $device, $oid, '0', $state_index_name, "Low pressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '1', $state_index_name, "High pressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '2', $state_index_name, "High duty cycle", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '3', $state_index_name, "High temperature", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '4', $state_index_name, "Low temperature", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '6', $state_index_name, "Canister 1 won't heat", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '7', $state_index_name, "Canister 1 won't cool", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '8', $state_index_name, "Canister 2 won't heat", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '9', $state_index_name, "Canister 2 won't cool", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '10', $state_index_name, "Unable to pressurize", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '11', $state_index_name, "Dew point alarm", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '12', $state_index_name, "Compressor timeout (for future use)", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '13', $state_index_name, "Communications error", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '14', $state_index_name, "Canister 1 thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '15', $state_index_name, "Canister 2 thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '16', $state_index_name, "Ambient thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '17', $state_index_name, "Overpressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '18', $state_index_name, "Bad calibrations in EEPROM", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '19', $state_index_name, "Bad limits in EEPROM", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '20', $state_index_name, "Short cycling", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
+discover_sensor(null, 'state', $device, $oid, '21', $state_index_name, "Pump shut down due to error condition", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'GAUGE');
 
-discover_sensor(null, 'state', $device, $oid, 'alarms.1', $state_index_name, "Low pressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.2', $state_index_name, "High pressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.3', $state_index_name, "High duty cycle", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.4', $state_index_name, "High temperature", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.5', $state_index_name, "Low temperature", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.6', $state_index_name, "Unused", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.7', $state_index_name, "Canister 1 won't heat", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.8', $state_index_name, "Canister 1 won't cool", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.9', $state_index_name, "Canister 2 won't heat", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.10', $state_index_name, "Canister 2 won't cool", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.11', $state_index_name, "Unable to pressurize", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.12', $state_index_name, "Dew point alarm", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.13', $state_index_name, "Compressor timeout (for future use)", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.14', $state_index_name, "Communications error", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.15', $state_index_name, "Canister 1 thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.16', $state_index_name, "Canister 2 thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.17', $state_index_name, "Ambient thermistor bad", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.18', $state_index_name, "Overpressure", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.19', $state_index_name, "Bad calibrations in EEPROM", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.20', $state_index_name, "Bad limits in EEPROM", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.21', $state_index_name, "Short cycling", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
-discover_sensor(null, 'state', $device, $oid, 'alarms.22', $state_index_name, "Pump shut down due to error condition", 1, '1', null, null, null, null, $current_value, 'snmp', null, null, null, 'Alarms', 'CURRENT');
 
 
 
